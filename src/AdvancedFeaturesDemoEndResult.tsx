@@ -37,24 +37,9 @@ const TodoList = () => {
 	</>
 }
 
-type TodoContextValue = {
-	todos: Todo[];
-	userId: number | null;
-	setUserId: (userId: number | null) => void;
-	numberOfCompletedTodos: number;
-};
-
-const TodoContext = createContext<TodoContextValue>({
-	todos: [],
-	userId: null,
-	setUserId: () => { },
-	numberOfCompletedTodos: 0
-});
-
-function TodoProvider({ children }: { children: React.ReactNode }) {
+function useTodos(userId?: number | null): Todo[] {
 	const [todos, setTodos] = useState<Todo[]>([]);
-	const [userId, setUserId] = useState<number | null>(null);
-	
+
 	const fetchTodos = async (userId?: number | null) => {
 		let response;
 		if (!userId) {
@@ -70,6 +55,27 @@ function TodoProvider({ children }: { children: React.ReactNode }) {
 	useEffect(() => {
 		fetchTodos(userId);
 	}, [userId]);
+
+	return todos;
+}
+
+type TodoContextValue = {
+	todos: Todo[];
+	userId: number | null;
+	setUserId: (userId: number | null) => void;
+	numberOfCompletedTodos: number;
+};
+
+const TodoContext = createContext<TodoContextValue>({
+	todos: [],
+	userId: null,
+	setUserId: () => { },
+	numberOfCompletedTodos: 0
+});
+
+function TodoProvider({ children }: { children: React.ReactNode }) {
+	const [userId, setUserId] = useState<number | null>(null);
+	const todos = useTodos(userId);
 
 	const numberOfCompletedTodos = useMemo(() => {
 		return todos.filter((todo) => todo.completed).length
