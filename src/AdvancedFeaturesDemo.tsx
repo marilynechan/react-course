@@ -14,7 +14,7 @@ const TodoDisplay = ({ todo }: { todo: Todo }) => <>
 </>
 
 export default function AdvancedFeaturesDemo() {
-	const [todos, setTodos] = useState<Todo[]>([
+	const [todos] = useState<Todo[]>([
 		{ id: 1, todo: 'Buy milk', completed: false, userId: 1 },
 		{ id: 2, todo: 'Buy bread', completed: true, userId: 1 },
 		{ id: 3, todo: 'Buy eggs', completed: false, userId: 2 },
